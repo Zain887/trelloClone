@@ -69,8 +69,9 @@ const Home: React.FC = () => {
             <h1 className=' text-white text-3xl'>Boards List</h1>
             <div className='flex flex-wrap justify-evenly gap-5 overflow-y-auto overflow-x-hidden  h-[655px] w-full bg-[#2f4f4f] rounded-lg p-5'>
                 {boardList.map((board, index) => (
-                    <div className='bg-gray-900 w-80 h-80 rounded-2xl p-3' onClick={(event) => handleBoardClick(event, board.id)}>
+                    <div key={index} className='bg-gray-900 w-80 h-80 rounded-2xl p-3' onClick={(event) => handleBoardClick(event, board.id)}>
                         <BoardPage
+                            boardID={index}
                             key={index}
                             board={board}
                             deleteBoard={(event) => deleteBoard(event, index)} />

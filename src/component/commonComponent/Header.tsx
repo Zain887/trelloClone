@@ -17,7 +17,7 @@ const Header: React.FC<Props> = (props) => {
       <h1 className="text-xl font-semibold flex items-center text-gray-500"><CgTrello size={20} color='gray' className='mr-1'/>Trello Board</h1>
       <nav>
         <ul className="flex space-x-4">
-        <li className="flex items-center  hover:underline cursor-pointer " onClick={()=> {navigate('/')}}>
+        <li className="flex items-center cursor-pointer " onClick={()=> {navigate('/')}}>
           <h1 className='text-xs font-bold text-[#008000]'>Back to Lobbay</h1>
             <BiSolidDoorOpen size={20} color='green'/>
             </li>

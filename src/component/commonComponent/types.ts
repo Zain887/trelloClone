@@ -35,7 +35,8 @@ export interface Board {
     id?: number | string;
     name: string;
     description: string;
-    userID: number | string;
+    userID?: number | string;
+    createdDate?: Date;
     list?: [];
 }
 
