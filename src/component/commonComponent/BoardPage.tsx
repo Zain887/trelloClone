@@ -14,16 +14,17 @@ const BoardPage: React.FC<Props> = ({ board, deleteBoard, boardID }) => {
   const [editTitle, setEditTitle] = useState(board.name);
   const [editDescription, setEditDescription] = useState(board.description);
 
-  // Load data from localStorage on component mount
   useEffect(() => {
     const storedName = localStorage.getItem(`boardName_${boardID}`);
     if (storedName !== null) {
-      setEditTitle(storedName);
+      setEditTitle(storedName)
+      console.log(storedName,'storednameHere')
     }
 
     const storedDescription = localStorage.getItem(`boardDescription_${boardID}`);
     if (storedDescription !== null) {
       setEditDescription(storedDescription);
+      console.log(storedDescription, 'stroredDescriptionHere')
     }
   }, [boardID]);
 
@@ -50,19 +51,13 @@ const BoardPage: React.FC<Props> = ({ board, deleteBoard, boardID }) => {
   };
 
   const handleBlur = () => {
-    // Save the edited data to localStorage
     localStorage.setItem(`boardName_${boardID}`, editTitle);
     localStorage.setItem(`boardDescription_${boardID}`, editDescription);
-
-    // Update the board data and set isEdit to true
     board.name = editTitle;
     board.description = editDescription;
-
     setIsNameEdit(true);
     setIsDescriptionEdit(true);
   };
-
-  // Ensure the board.id is of type number or generate a UUID if it's not set
   if (typeof board.id !== 'number') {
     board.id = generateUUID();
   }

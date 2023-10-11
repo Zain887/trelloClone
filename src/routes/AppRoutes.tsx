@@ -3,6 +3,7 @@ import Signup from '../pages/Signup';
 import Login from '../pages/Login';
 import Board from '../pages/Board';
 import Home from '../pages/Home';
+import Dashboard from '../pages/Dashboard';
 
 function AppRoute() {
     return (
@@ -11,6 +12,7 @@ function AppRoute() {
             <Route path="/login" element={<Login />} />
             <Route path='/board' element={<Board />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path='/dashboard' element={<Dashboard />} />
         </Routes>
     );
 }

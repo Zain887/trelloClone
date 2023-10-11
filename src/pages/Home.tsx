@@ -6,16 +6,12 @@ import { Board } from '../component/commonComponent/types';
 const Home: React.FC = () => {
     const navigate = useNavigate();
     const [boardList, setBoardList] = useState<Board[]>([]);
-
-    // Load boardList from local storage when the component mounts
     useEffect(() => {
         const storedBoardList = localStorage.getItem('boardList');
         if (storedBoardList) {
             setBoardList(JSON.parse(storedBoardList));
         }
     }, []);
-
-    // Save boardList to local storage whenever it changes
     useEffect(() => {
         localStorage.setItem('boardList', JSON.stringify(boardList));
     }, [boardList]);
@@ -38,14 +34,14 @@ const Home: React.FC = () => {
     }
 
     const handleBoardClick = (event: React.MouseEvent<HTMLDivElement>, boardId: number | string | undefined) => {
-        event.stopPropagation(); // Stop the click event from propagating
+        event.stopPropagation();
         navigate(`/board/${boardId}`);
     };
     return (
         <div className='bg-black h-screen p-5 overflow-hidden overflow-y-auto'>
             <div className='flex justify-center items-center'>
                 <div className='text-center'>
-                    <h1 className='text-3xl text-red-700 font-extrabold mb-4'>Welcome to the Board Lobby</h1>
+                    <h1 className='text-3xl text-red-700 font-extrabold mb-4'>Welcome to the Boards Lobby</h1>
                     <div className="animate-bounce">
                         <p className="text-2xl mb-2 text-white">This is a Boards Lobby Area</p>
                         <p className="text-2xl text-white">Where you can add a new board & go to another board as a Guest</p>

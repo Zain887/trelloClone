@@ -11,13 +11,13 @@ interface Props {
 const Header: React.FC<Props> = (props) => {
   const navigate = useNavigate();
   return (
-    <header className="bg-gray-950 text-white py-2 px-4">
+    <header className="border-b-2 backdrop-blur-sm text-white py-2 px-4">
     <div className="flex items-center justify-between">
         <CgMenuGridO size={20} color='gray' className='mr-5'/>
       <h1 className="text-xl font-semibold flex items-center text-gray-500"><CgTrello size={20} color='gray' className='mr-1'/>Trello Board</h1>
       <nav>
         <ul className="flex space-x-4">
-        <li className="flex items-center cursor-pointer " onClick={()=> {navigate('/')}}>
+        <li className="flex items-center cursor-pointer " onClick={()=> {navigate('/dashboard')}}>
           <h1 className='text-xs font-bold text-[#008000]'>Back to Lobbay</h1>
             <BiSolidDoorOpen size={20} color='green'/>
             </li>

@@ -20,7 +20,7 @@ const Login = () => {
         e.preventDefault();
         // Handle form submission here
         console.log('Form submitted with data:', formData);
-        navigate('/');
+        navigate('/dashboard');
     };
 
     return (
