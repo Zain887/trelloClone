@@ -33,7 +33,7 @@ async function bootstrap() {
       'JWT-auth', // This name here is important for matching up with @ApiBearerAuth() in your controller!
     )
     .build()
-    console.log("baby shasdo;ihjhpuohfdsgrk");
+    
     
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
