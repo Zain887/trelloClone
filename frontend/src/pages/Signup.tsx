@@ -18,13 +18,29 @@ const Signup = () => {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
-        // Handle form submission here
-        console.log('Form submitted with data:', formData);
-        navigate('/login')
+        try {
+            const response = await fetch('http://localhost:5000/users/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
 
-    };
+            if (response.ok) {
+                // Successful submission, you can redirect to a success page or take any other action
+                console.log('Form submitted successfully');
+                navigate('/login');
+            } else {
+                // Handle errors here
+                console.error('Form submission failed');
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+        }
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

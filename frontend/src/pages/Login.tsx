@@ -15,13 +15,26 @@ const Login = () => {
             [name]: value,
         }));
     };
-
-    const handleSubmit = (e: React.FormEvent) => {
+    
+    const handleSubmit = async (e:React.SyntheticEvent) => {
         e.preventDefault();
-        // Handle form submission here
-        console.log('Form submitted with data:', formData);
-        navigate('/dashboard');
-    };
+        try{
+            const response = await fetch('http://localhost:5000/auth/login',{
+                method:'POST',
+                headers: {
+                    'Content-Type' : 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+            if(response.ok) {
+                navigate('/dashboard')
+            }else{
+                console.log('userName and password not matched');
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+        }
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
