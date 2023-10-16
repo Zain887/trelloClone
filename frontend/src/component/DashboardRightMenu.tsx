@@ -36,6 +36,9 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
         const updateRecentView = { src: selectedBoard.src, alt: selectedBoard.alt }
         recentView.push(updateRecentView);
         setRecentView([...recentView].splice(-4));
+
+        localStorage.setItem('recentView', JSON.stringify(recentView));
+
     }
 
     return (
