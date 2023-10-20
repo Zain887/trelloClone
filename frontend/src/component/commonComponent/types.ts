@@ -40,17 +40,18 @@ export interface Board {
 
 export interface List {
     listId: string
-    listTitle: string;
-    edit: boolean;
+    listTitle?: string;
+    edit?: boolean;
     createdDate?: Date;
     updatedDate?: Date;
-    card?: [];
+    card?: Card[];
 }
 
 export interface Card {
     cardId: string;
     cardTitle: string;
-    todo: [];
+    edit: boolean;
+    todo?: [];
 }
 
 export interface Todo {
