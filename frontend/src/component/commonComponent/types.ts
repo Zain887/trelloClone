@@ -32,41 +32,35 @@ export interface CardMember {
 }
 
 export interface Board {
-    id?: number | string;
+    id: string
     name: string;
-    description: string;
-    userID?: number | string;
     createdDate?: Date;
     list?: [];
 }
 
 export interface List {
-    id: number;
+    listId: string
     listTitle: string;
-    position: Enum;
-    boardID: number;
-    createdDate: Date;
-    updatedDate: Date;
-    card: [];
+    edit: boolean;
+    createdDate?: Date;
+    updatedDate?: Date;
+    card?: [];
 }
 
 export interface Card {
-    id: number;
-    title: string;
-    description: string;
-    position: Enum;
+    cardId: string;
+    cardTitle: string;
     todo: [];
 }
 
 export interface Todo {
-    id: number;
+    todoId: string;
     name: string;
-    position: Enum;
-    todoItem: [];
+    todoItem?: [];
 }
 
 export interface TodoItem {
-    id: number;
+    todoItemid: string;
     title: string;
     isCompleted: boolean;
 }
@@ -85,72 +79,3 @@ export interface Attechment {
 export function generateUUID(): string {
     return uuidv4();
 }
-
-
-
-/* ********************************************************* Example usage ****************************************************** */
-
-/* const user: User = {
-    id: 1,
-    name: 'John Doe',
-  };
-  
-  const board: Board = {
-    id: 1,
-    name: 'Project Board',
-    description: 'Description of the project board',
-    userID: user.id,
-  };
-  
-  const list: List = {
-    id: 1,
-    listTitle: 'To Do',
-    position: Enum.Pending,
-    boardID: board.id,
-    createdDate: new Date(),
-    updatedDate: new Date(),
-  };
-  
-  const card: Card = {
-    id: 1,
-    title: 'Task Card',
-    description: 'Description of the task card',
-    position: Enum.InProgress,
-    todos: [
-      {
-        id: 1,
-        name: 'Task 1',
-        position: Enum.Pending,
-        todoItems: [
-          {
-            id: 1,
-            title: 'Subtask 1',
-            isCompleted: false,
-          },
-        ],
-      },
-    ],
-  };
-  
-  const comment: Comment = {
-    id: 1,
-    description: 'A comment on a card',
-    cardID: card.id,
-    memberID: user.id,
-  };
-  
-  const attachment: Attachment = {
-    id: 1,
-  };
-  
-  const boardMember: BoardMember = {
-    id: 1,
-    memberID: user.id,
-    boardID: board.id,
-  };
-  
-  const cardMember: CardMember = {
-    id: 1,
-    cardID: card.id,
-    memberID: user.id,
-  }; */
