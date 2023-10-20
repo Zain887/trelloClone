@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '../component/commonComponent/Header';
 import { useLocation } from 'react-router-dom';
-import BoraddLeftBar from '../component/commonComponent/borderLeftBar';
+import BoradLeftBar from '../component/commonComponent/BoardLeftBar';
 import ListComponent from '../component/List';
 
 
@@ -18,7 +18,7 @@ const Board: React.FC<Props> = (props) => {
                 <Header />
             </div>
             <div className='flex'>
-                <BoraddLeftBar />
+                <BoradLeftBar />
                 <div className="w-full h-screen pl-96 pt-[54px] bg-cover bg-no-repeat overflow-y-scroll" style={{ backgroundImage: `url(${backgroundImage})` }}>
                     <ListComponent/>
                 </div>

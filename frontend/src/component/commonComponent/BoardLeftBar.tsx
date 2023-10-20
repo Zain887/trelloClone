@@ -10,11 +10,11 @@ interface Props {
 const BoraddLeftBar: React.FC<Props> = (props) => {
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const location = useLocation();
-    const boardName = location.state && location.state.name; // Check if state exists
+    const boardName = location.state && location.state.alt;
     return (
         <>
-            <div className='backdrop-blur-sm w-96 h-full top-[46px] p-5 fixed'>
-            <h1 className='text-white font-bold uppercase'>{boardName}</h1>
+            <div className='backdrop-blur-md w-96 h-full top-[46px] p-5 fixed'>
+                <h1 className='text-white font-bold uppercase'>{boardName}</h1>
                 <div className='flex items-center justify-between'>
                     <h1
                         className={`flex items-center gap-4 h-8 p-2 cursor-pointer rounded-md text-[#2173E7]`}
@@ -29,7 +29,7 @@ const BoraddLeftBar: React.FC<Props> = (props) => {
                     </div>
                 </div>
                 <div className='mt-5'>
-                    <h1 className='text-gray-800'>Admin@admin.com</h1>
+                    <h1 className='text-white'>Admin@admin.com</h1>
                 </div>
                 {isEdit && (
                     <form>

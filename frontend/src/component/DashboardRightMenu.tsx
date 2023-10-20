@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom';
 interface Props {
     // ActiveBoard: string;
 }
-
 const DashboardRightMenu: React.FC<Props> = (props) => {
     const navigate = useNavigate();
 
@@ -32,13 +31,11 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
 
     const recentViewBoard = (index: number) => {
         const selectedBoard = board[index];
-        navigate(`/board/${selectedBoard.alt}`, { state: { src: selectedBoard.src } });
-        const updateRecentView = { src: selectedBoard.src, alt: selectedBoard.alt }
+        navigate(`/board/${selectedBoard.alt}`, { state: { src: selectedBoard.src, alt:selectedBoard.alt } });
+        const updateRecentView = { src: selectedBoard.src, alt: selectedBoard.alt, }
         recentView.push(updateRecentView);
         setRecentView([...recentView].splice(-4));
-
         localStorage.setItem('recentView', JSON.stringify(recentView));
-
     }
 
     return (
