@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { List } from '../component/commonComponent/types';
 import CardComponent from './commonComponent/Card';
-// import Card from './Card';
 
 const ListComponent: React.FC = () => {
     const [list, setList] = useState<List[]>([
@@ -10,14 +9,16 @@ const ListComponent: React.FC = () => {
             listId: uuid(),
             listTitle: 'list',
             edit: false,
-            card: []
+            card: [],
         },
     ]);
 
     const updateColumTitle = (listId: string) => {
         const updatedList = list.map((listItem) => {
             if (listItem.listId === listId) {
-                return { ...listItem, edit: true };
+                if (listItem.listTitle === "list") {
+                    return { ...listItem, edit: true };
+                }
             }
             return listItem;
         });
@@ -49,7 +50,7 @@ const ListComponent: React.FC = () => {
 
     const addNewlist = () => {
         const newlist = [...list];
-        const newlistTitle = `list ${newlist.length + 1}`;
+        const newlistTitle = 'list';
         newlist.push({
             listId: uuid(),
             listTitle: newlistTitle,

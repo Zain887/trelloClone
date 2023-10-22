@@ -21,7 +21,9 @@ const CardComponent: React.FC = () => {
             if (listItem.listId === listId) {
                 const updatedCardList = listItem.card?.map((card) => {
                     if (card.cardId === cardId) {
-                        return { ...card, edit: true };
+                        if (card.cardTitle === 'Your Card Title') {
+                            return { ...card, edit: true };
+                        }
                     }
                     return card;
                 });

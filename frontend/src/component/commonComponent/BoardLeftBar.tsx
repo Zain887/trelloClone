@@ -13,7 +13,7 @@ const BoraddLeftBar: React.FC<Props> = (props) => {
     const boardName = location.state && location.state.alt;
     return (
         <>
-            <div className='backdrop-blur-md w-96 h-full top-[46px] p-5 fixed'>
+            <div className='backdrop-blur-md w-96 h-full top-[46px] p-5 fixed z-10'>
                 <h1 className='text-white font-bold uppercase'>{boardName}</h1>
                 <div className='flex items-center justify-between'>
                     <h1

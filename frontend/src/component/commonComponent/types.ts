@@ -35,7 +35,7 @@ export interface Board {
     id: string
     name: string;
     createdDate?: Date;
-    list?: [];
+    list?: List[];
 }
 
 export interface List {
@@ -51,13 +51,13 @@ export interface Card {
     cardId: string;
     cardTitle: string;
     edit: boolean;
-    todo?: [];
+    todo?: Todo[];
 }
 
 export interface Todo {
     todoId: string;
     name: string;
-    todoItem?: [];
+    todoItem?: TodoItem[];
 }
 
 export interface TodoItem {
