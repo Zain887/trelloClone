@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { v4 as uuid } from 'uuid';
-import { List } from '../component/commonComponent/types';
+import { List, generateUUID } from '../component/commonComponent/types';
 import CardComponent from './commonComponent/Card';
 
 const ListComponent: React.FC = () => {
     const [list, setList] = useState<List[]>([
         {
-            listId: uuid(),
+            listId: generateUUID(),
             listTitle: 'list',
             edit: false,
             card: [],
@@ -52,7 +51,7 @@ const ListComponent: React.FC = () => {
         const newlist = [...list];
         const newlistTitle = 'list';
         newlist.push({
-            listId: uuid(),
+            listId: generateUUID(),
             listTitle: newlistTitle,
             edit: false,
         });
@@ -72,17 +71,15 @@ const ListComponent: React.FC = () => {
                 listItem.card.push({
                     cardTitle: newCardTitle,
                     edit: false,
-                    cardId: uuid(),
+                    cardId: generateUUID(),
                 });
             }
             return listItem;
         });
-
         setList(updatedList);
     };
 
 
-    const [addNewCardData, setAddNewCardData] = useState<boolean>(false);
 
     return (
         <div className='inline-flex items-center'>
@@ -126,21 +123,6 @@ const ListComponent: React.FC = () => {
             <button className='bg-blue-500 w-[179px] mx-3 px-6 h-12 rounded-lg font-bold hover:text-orange-600 hover:bg-black' onClick={addNewlist}>
                 Add Another List
             </button>
-            {addNewCardData && (
-                <div className='backdrop-blur-md bg-[#80808087] w-screen h-screen fixed top-0 left-0 z-20'>
-                    <form className=' absolute top-[30%] left-[35%] w-[500px]'>
-                        <div className='mt-5 grid'>
-                            <label htmlFor='' className='text-black font-bold text-xl'>Title</label>
-                            <input type='text' className='h-[40px] rounded-md' />
-                        </div>
-                        <div className='mt-5 grid'>
-                            <label htmlFor='' className='text-black font-bold text-xl'>Description</label>
-                            <input type='text' className='h-[40px] rounded-md' />
-                        </div>
-                        <button type='submit' className='bg-black text-white font-bold w-full h-10 text-3xl rounded mt-5'>Add</button>
-                    </form>
-                </div>
-            )}
         </div>
     );
 };

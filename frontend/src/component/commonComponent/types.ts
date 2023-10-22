@@ -1,7 +1,7 @@
 // types.ts
 import { v4 as uuidv4 } from 'uuid';
 
-enum Enum {
+export enum Enum {
     pandding,
     Inprogress,
     Complete,
@@ -33,7 +33,7 @@ export interface CardMember {
 
 export interface Board {
     id: string
-    name: string;
+    name?: string;
     createdDate?: Date;
     list?: List[];
 }
@@ -51,12 +51,14 @@ export interface Card {
     cardId: string;
     cardTitle: string;
     edit: boolean;
-    todo?: Todo[];
+    createTodo?: boolean;
+    todos?: Todo[];
 }
 
 export interface Todo {
     todoId: string;
-    name: string;
+    name?: string;
+    description?:string;
     todoItem?: TodoItem[];
 }
 
@@ -64,13 +66,16 @@ export interface TodoItem {
     todoItemid: string;
     title: string;
     isCompleted: boolean;
+    edit?: boolean;
+    status?:Enum;
+    comments?: Comment[];
 }
 
 export interface Comment {
-    id: number;
+    id: string;
     description: string;
-    cardID: number;
-    memberID: number;
+    cardID: string;
+    memberID: string;
 }
 
 export interface Attechment {

@@ -6,9 +6,7 @@ import { AiTwotoneSetting, AiOutlineInfoCircle, AiFillPlusSquare } from 'react-i
 import { FaToolbox } from 'react-icons/fa';
 import { MdOutlinePeopleOutline } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import { Board } from './commonComponent/types';
-import { v4 as uuid } from 'uuid';
-
+import { Board, generateUUID } from './commonComponent/types';
 
 interface Props {
     // ActiveBoard: string;
@@ -50,10 +48,12 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
     const gotoBoardArea = (index: string) => {
         const selectedBoard = board.find((boardSec) => boardSec.id === index);
         if (selectedBoard) {
-            navigate(`/board/${selectedBoard.name}`, {
-                state: { src: '/images/art-bg2.jpg', alt: selectedBoard.name },
+            const alt = selectedBoard.name as string; // Type assertion
+            navigate(`/board/${alt}`, {
+                state: { src: '/images/art-bg2.jpg', alt: alt }
             });
-            const updateRecentView = { src: '/images/art-bg2.jpg', alt: selectedBoard.name };
+        
+            const updateRecentView = { src: '/images/art-bg2.jpg', alt: alt };
             recentView.push(updateRecentView);
             setRecentView([...recentView].splice(-4));
             saveDataToLocalStorage();
@@ -73,8 +73,9 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
 
         const newBoard = [...board];
         newBoard.push({
-            id: uuid(),
+            id: generateUUID(),
             name: boardName,
+            list:[]
         });
         setBoard(newBoard);
         setBoardName('');
@@ -175,7 +176,7 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
             {updateBoard && (
                 <div className='fixed top-0 left-0 bg-[#000000ad] w-full h-full z-10 backdrop-blur-md'>
                     <form onSubmit={handleSubmit} className='w-96 h-auto p-5 absolute top-[35%] left-[40%]'>
-                        <label htmlFor="" className='text-white font-bold text-lg'>Enter the Board Name</label>
+                        <label className='text-white font-bold text-lg'>Enter the Board Name</label>
                         <br />
                         <input
                             className='my-5 w-full h-12 text-3xl p-2 box-border rounded-lg outline-none'
