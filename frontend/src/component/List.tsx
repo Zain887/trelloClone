@@ -63,11 +63,9 @@ const ListComponent: React.FC = () => {
         const updatedList = list.map((listItem) => {
             if (listItem.listId === listId) {
                 const newCardTitle = `card${listItem.card ? listItem.card.length + 1 : 1}`;
-
                 if (!listItem.card) {
                     listItem.card = [];
                 }
-
                 listItem.card.push({
                     cardTitle: newCardTitle,
                     edit: false,
