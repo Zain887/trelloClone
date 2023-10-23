@@ -18,7 +18,7 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
     const [updateBoard, setUpdateBoard] = useState<boolean>(false);
     const [board, setBoard] = useState<Board[]>([])
     const [recentView, setRecentView] = useState<{ src: string; alt: string }[]>([]);
-
+    
     const guestWorkspace = [
         { src: '/images/tree-bg.jpg', alt: 'Assetize Today Web' },
         { src: '/images/art-bg.jpg', alt: 'Assetize Today Web' },
@@ -26,39 +26,37 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
         { src: '/images/art-bg.jpeg', alt: 'Assetize Today Web' },
     ];
 
+    // useEffect(() => {
+    //     const savedBoard = localStorage.getItem('board');
+    //     if (savedBoard) {
+    //         setBoard(JSON.parse(savedBoard));
+    //     }
+    //     const savedRecentView = localStorage.getItem('recentView');
+    //     if (savedRecentView) {
+    //         setRecentView(JSON.parse(savedRecentView));
+    //     }
+    // }, []);
 
-    useEffect(() => {
-        const savedBoard = localStorage.getItem('board');
-        if (savedBoard) {
-            setBoard(JSON.parse(savedBoard));
-        }
-
-        const savedRecentView = localStorage.getItem('recentView');
-        if (savedRecentView) {
-            setRecentView(JSON.parse(savedRecentView));
-        }
-    }, []);
-
-    const saveDataToLocalStorage = () => {
-        localStorage.setItem('board', JSON.stringify(board));
-        localStorage.setItem('recentView', JSON.stringify(recentView));
-    };
+    // const saveDataToLocalStorage = () => {
+    //     localStorage.setItem('board', JSON.stringify(board));
+    //     localStorage.setItem('recentView', JSON.stringify(recentView));
+    // };
 
 
     const gotoBoardArea = (index: string) => {
         const selectedBoard = board.find((boardSec) => boardSec.id === index);
         if (selectedBoard) {
-            const alt = selectedBoard.name as string; // Type assertion
+            const alt = selectedBoard.name as string;
             navigate(`/board/${alt}`, {
                 state: { src: '/images/art-bg2.jpg', alt: alt }
             });
-        
             const updateRecentView = { src: '/images/art-bg2.jpg', alt: alt };
             recentView.push(updateRecentView);
             setRecentView([...recentView].splice(-4));
-            saveDataToLocalStorage();
+            // saveDataToLocalStorage();
         }
     };
+
     const gotoRecentView = (index: number) => {
         const selectedItem = recentView[index];
         if (selectedItem) {
@@ -70,7 +68,6 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
         if (boardName.trim() === '') {
             return;
         }
-
         const newBoard = [...board];
         newBoard.push({
             id: generateUUID(),
@@ -85,8 +82,10 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
         e.preventDefault();
         addNewBoard();
         setUpdateBoard(false);
-        saveDataToLocalStorage();
+        // saveDataToLocalStorage();
     };
+    const userId = localStorage.getItem('userId');
+    console.log(userId);
     return (
         <div className="w-full h-full">
             {/* #########################################################Recent View#################################################### */}

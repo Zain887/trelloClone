@@ -9,11 +9,11 @@ interface Props {
 const TodoItemComponent: React.FC<Props> = (props) => {
     const [todoItemList, setTodoItemList] = useState<TodoItem[]>([
         {
-            title: 'Your Task Title here',
-            isCompleted: true,
+            title: 'New Task',
+            isCompleted: false,
             todoItemid: generateUUID(),
             edit: false,
-            status: Enum.pending, // Fixed the typo in the enum
+            status: Enum.pending,
         },
     ]);
 
@@ -49,14 +49,14 @@ const TodoItemComponent: React.FC<Props> = (props) => {
 
     const addNewTodoItem = () => {
         const newTodoItem = {
-          title: 'New Task',
-          isCompleted: false,
-          todoItemid: generateUUID(),
-          edit: false,
-          status: Enum.pending,
+            title: 'New Task',
+            isCompleted: false,
+            todoItemid: generateUUID(),
+            edit: false,
+            status: Enum.pending,
         };
         setTodoItemList((prevTodoItemList) => [...prevTodoItemList, newTodoItem]);
-      };
+    };
     return (
         <>
             {todoItemList.map((item, index) => (
@@ -99,7 +99,7 @@ const TodoItemComponent: React.FC<Props> = (props) => {
                     </select>
                 </div>
             ))}
-            <button className='flex items-center gap-2 bg-red-100 rounded-lg px-2 text-blue-600 text-xs cursor-pointer font-bold'
+            <button className='flex items-center gap-2 bg-red-100 rounded-lg px-2 text-blue-600 text-xs cursor-pointer font-bold mb-5'
                 onClick={addNewTodoItem}
             >
                 <BsFillCheckSquareFill />

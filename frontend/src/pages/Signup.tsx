@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -21,26 +22,21 @@ const Signup = () => {
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:5000/users/signup', {
-                method: 'POST',
+            const response = await axios.post('http://localhost:5000/users/signup', formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
             });
-
-            if (response.ok) {
-                // Successful submission, you can redirect to a success page or take any other action
+            if (response) {
                 console.log('Form submitted successfully');
                 navigate('/login');
             } else {
-                // Handle errors here
                 console.error('Form submission failed');
             }
         } catch (error) {
             console.error('Network error:', error);
         }
-    }
+    };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

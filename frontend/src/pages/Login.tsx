@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,21 +16,34 @@ const Login = () => {
             [name]: value,
         }));
     };
-    
-    const handleSubmit = async (e:React.SyntheticEvent) => {
+
+    const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
-        try{
-            const response = await fetch('http://localhost:5000/auth/login',{
-                method:'POST',
+        try {
+            const response = await axios.post('http://localhost:5000/auth/login', formData, {
                 headers: {
-                    'Content-Type' : 'application/json',
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
             });
-            if(response.ok) {
-                navigate('/dashboard')
-            }else{
-                console.log('userName and password not matched');
+            if (response) {
+                const userRes = await axios.get(`http://localhost:5000/users/email/?email=${formData.email}`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                )
+                if (userRes.status === 200) {
+                    const userData = userRes.data;
+                    localStorage.setItem('userId', userData.id);
+                    console.log('User data:', userData);
+                } else {
+                    console.error('Failed to retrieve user data');
+                }
+                console.log('Form submitted successfully');
+                navigate('/');
+            } else {
+                console.error('Form submission failed');
             }
         } catch (error) {
             console.error('Network error:', error);
@@ -85,13 +99,13 @@ const Login = () => {
                         </button>
                     </div>
                 </form>
-                    <div>
-                        <button onClick={() => navigate('/signup')}
-                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            Create New Account
-                        </button>
-                    </div>
+                <div>
+                    <button onClick={() => navigate('/signup')}
+                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                        Create New Account
+                    </button>
+                </div>
             </div>
         </div>
     );

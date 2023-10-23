@@ -21,7 +21,7 @@ const TodoComponent: React.FC<TodoComponentProps> = ({ todo, onUpdateTodo }) => 
     };
 
     return (
-        <div className='w-full h-auto overflow-hidden'>
+        <div className='w-full h-auto overflow-hidden mt-5 pt-2 border-t-2 border-red-500'>
             {isEditing ? (
                 <div>
                     <input

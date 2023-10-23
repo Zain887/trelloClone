@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { List, Todo, generateUUID } from '../commonComponent/types';
+import {MdModeEditOutline} from 'react-icons/md';
 import TodoComponent from './Todo';
 
 const CardComponent: React.FC = () => {
@@ -54,6 +55,7 @@ const CardComponent: React.FC = () => {
 						} else {
 							updatedCard.todos.push(newTodo);
 						}
+
 						return updatedCard;
 					}
 					return card;
@@ -76,7 +78,9 @@ const CardComponent: React.FC = () => {
 							}
 							return todo;
 						});
+
 						const updatedCard = { ...card, todos: updatedTodos };
+
 						return updatedCard;
 					}
 					return card;
@@ -125,7 +129,7 @@ const CardComponent: React.FC = () => {
 			{list.map((column) => (
 				<div key={column.listId} className='my-5'>
 					{column.card?.map((card) => (
-						<div key={card.cardId} className='bg-[#282E33] mb-2 rounded-lg p-3 h-auto break-words relative'>
+						<div key={card.cardId} className='bg-[#282E33] mb-2 rounded-lg p-3 h-auto break-words relative flex'>
 							{card.edit ? (
 								<input
 									type='text'
@@ -143,7 +147,7 @@ const CardComponent: React.FC = () => {
 									{card.cardTitle}
 								</p>
 							)}
-
+							<MdModeEditOutline size={20} color='White' onClick={()=>{console.log(column.listId)}}/>
 							{card.todos?.map((todo) => (
 								<TodoComponent
 									key={todo.todoId}
@@ -152,8 +156,9 @@ const CardComponent: React.FC = () => {
 										handleUpdateTodo(column.listId, card.cardId, updatedTodo)
 									}
 								/>
+
 							))}
-							<button className='w-full text-white hover:text-green-500' onClick={() => handleCreateTodo(column.listId, card.cardId)}>Create new Task</button>
+							{/* <button className='w-full text-white hover:text-green-500' onClick={() => handleCreateTodo(column.listId, card.cardId)}>Create new Task</button> */}
 						</div>
 					))}
 				</div>
