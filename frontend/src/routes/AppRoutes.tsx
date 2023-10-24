@@ -8,7 +8,7 @@ function AppRoute() {
     return (
         <Routes> {/* Use Routes instead of Route */}
             <Route path="/login" element={<Login />} />
-            <Route path='/board' element={<Board />} />
+            <Route path='/board/:boardId' element={<Board />} />
             <Route path="/signup" element={<Signup />} />
             <Route path='/' element={<Dashboard />} />
         </Routes>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { BiTimeFive, BiLogoTrello } from 'react-icons/bi';
 import { HiOutlineViewGrid } from 'react-icons/hi';
 import { BsFillPersonFill } from 'react-icons/bs';
@@ -6,7 +7,7 @@ import { AiTwotoneSetting, AiOutlineInfoCircle, AiFillPlusSquare } from 'react-i
 import { FaToolbox } from 'react-icons/fa';
 import { MdOutlinePeopleOutline } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import { Board, generateUUID } from './commonComponent/types';
+import { Board, Member } from '../commonComponent/types';
 
 interface Props {
     // ActiveBoard: string;
@@ -17,65 +18,76 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
     const [boardName, setBoardName] = useState('');
     const [updateBoard, setUpdateBoard] = useState<boolean>(false);
     const [board, setBoard] = useState<Board[]>([])
-    const [recentView, setRecentView] = useState<{ src: string; alt: string }[]>([]);
-    
+    const [recentView, setRecentView] = useState<{ src: string; title: string }[]>([]);
+    const [member, setMember] = useState<Member[]>([]);
+
     const guestWorkspace = [
-        { src: '/images/tree-bg.jpg', alt: 'Assetize Today Web' },
-        { src: '/images/art-bg.jpg', alt: 'Assetize Today Web' },
-        { src: '/images/art-bg2.jpg', alt: 'Assetize Today Web' },
-        { src: '/images/art-bg.jpeg', alt: 'Assetize Today Web' },
+        { src: '/images/tree-bg.jpg', title: 'Assetize Today Web' },
+        { src: '/images/art-bg.jpg', title: 'Assetize Today Web' },
+        { src: '/images/art-bg2.jpg', title: 'Assetize Today Web' },
+        { src: '/images/art-bg.jpeg', title: 'Assetize Today Web' },
     ];
 
-    // useEffect(() => {
-    //     const savedBoard = localStorage.getItem('board');
-    //     if (savedBoard) {
-    //         setBoard(JSON.parse(savedBoard));
-    //     }
-    //     const savedRecentView = localStorage.getItem('recentView');
-    //     if (savedRecentView) {
-    //         setRecentView(JSON.parse(savedRecentView));
-    //     }
-    // }, []);
-
-    // const saveDataToLocalStorage = () => {
-    //     localStorage.setItem('board', JSON.stringify(board));
-    //     localStorage.setItem('recentView', JSON.stringify(recentView));
-    // };
-
+    useEffect(() => {
+        const fetchBoards = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5000/board?userId=${localStorage.getItem('userId')}`);
+                const data = response.data;
+                setBoard(data);
+            } catch (error) {
+                console.error('Error fetching boards', error);
+            }
+        };
+        fetchBoards();
+    }, []);
 
     const gotoBoardArea = (index: string) => {
         const selectedBoard = board.find((boardSec) => boardSec.id === index);
         if (selectedBoard) {
-            const alt = selectedBoard.name as string;
-            navigate(`/board/${alt}`, {
-                state: { src: '/images/art-bg2.jpg', alt: alt }
+            const title = selectedBoard.title || "Untitled";
+            const { id: boardId } = selectedBoard;
+            navigate(`/board/${boardId}`, {
+                state: { src: '/images/art-bg2.jpg', title, boardId }
             });
-            const updateRecentView = { src: '/images/art-bg2.jpg', alt: alt };
+
+            const updateRecentView = { src: '/images/art-bg2.jpg', title, boardId };
             recentView.push(updateRecentView);
             setRecentView([...recentView].splice(-4));
             // saveDataToLocalStorage();
         }
     };
 
+
     const gotoRecentView = (index: number) => {
         const selectedItem = recentView[index];
         if (selectedItem) {
-            navigate(`/board/${selectedItem.alt}`, { state: { src: selectedItem.src, alt: selectedItem.alt } });
+            navigate(`/board/${selectedItem.title}`, { state: { src: selectedItem.src, title: selectedItem.title } });
         }
     };
-    const addNewBoard = () => {
+
+    const addNewBoard = async () => {
         setUpdateBoard(true);
         if (boardName.trim() === '') {
             return;
         }
-        const newBoard = [...board];
-        newBoard.push({
-            id: generateUUID(),
-            name: boardName,
-            list:[]
-        });
-        setBoard(newBoard);
-        setBoardName('');
+        const newBoardData = {
+            title: boardName,
+            list: []
+        };
+        try {
+            const response = await axios.post(`http://localhost:5000/board?userId=${userId}`, newBoardData);
+            const newBoard = response.data;
+            // Store the new board's ID in localStorage
+            const boardIds = JSON.parse(localStorage.getItem('boardIds') || '[]');
+            boardIds.push(newBoard.id);
+            localStorage.setItem('boardIds', JSON.stringify(boardIds));
+            // Update the state with the newly created board
+            setBoard((prevBoards) => [...prevBoards, newBoard]);
+            setBoardName('');
+            setUpdateBoard(false);
+        } catch (error) {
+            console.error('Error adding a new board', error);
+        }
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -86,6 +98,21 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
     };
     const userId = localStorage.getItem('userId');
     console.log(userId);
+
+    useEffect(() => {
+        const fetchMember = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5000/members`)
+                console.log(response.data);
+
+                const member = response.data;
+                setMember(member);
+            }
+            catch (error) {
+                console.error('Error fetching data from the API', error);
+            }
+        }; fetchMember();
+    }, []);
     return (
         <div className="w-full h-full">
             {/* #########################################################Recent View#################################################### */}
@@ -106,9 +133,9 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
                                 onClick={() => gotoRecentView(index)} // Added this line
 
                             >
-                                <img src={image.src} alt={image.alt} style={{ width: '100%', height: '100%' }} />
+                                <img src={image.src} alt={image.title} style={{ width: '100%', height: '100%' }} />
                                 <p className="absolute top-3 left-3 text-white font-bold">
-                                    {image.alt}
+                                    {image.title}
                                 </p>
                             </div>
                         ))}
@@ -138,7 +165,7 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
                         </div>
                         <div className='flex items-center gap-2 bg-slate-100 rounded-md px-2 py-1 cursor-pointer'>
                             <BsFillPersonFill size={16} color="black" />
-                            <h1 className='text-sm'>Members (6)</h1>
+                            <h1 className='text-sm'>Members ({member.length})</h1>
                         </div>
                         <div className='flex items-center gap-2 bg-slate-100 rounded-md px-2 py-1 cursor-pointer'>
                             <AiTwotoneSetting size={16} color="black" />
@@ -159,7 +186,7 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
                         >
                             <img src='/images/art-bg2.jpg' style={{ width: '100%', height: '100%' }} />
                             <p className="absolute top-3 left-3 text-white font-bold">
-                                {boardSec.name}
+                                {boardSec.title}
                             </p>
                         </div>
                     ))}
@@ -212,9 +239,9 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
                             key={index}
                             className="relative w-56 h-32 bg-gray-300 overflow-hidden mt-4 rounded cursor-pointer"
                         >
-                            <img src={image.src} alt={image.alt} style={{ width: '100%', height: '100%' }} />
+                            <img src={image.src} alt={image.title} style={{ width: '100%', height: '100%' }} />
                             <p className="absolute top-3 left-3 text-white font-bold">
-                                {image.alt}
+                                {image.title}
                             </p>
                         </div>
                     ))}

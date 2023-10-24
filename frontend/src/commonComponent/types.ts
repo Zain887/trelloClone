@@ -14,9 +14,9 @@ export interface User {
 }
 
 export interface Member {
-    id: number;
-    name: string;
-    desigination: string;
+    id: string;
+    email?: string;
+    desigination?: string;
 }
 
 export interface BoradMember {
@@ -33,14 +33,14 @@ export interface CardMember {
 
 export interface Board {
     id: string
-    name?: string;
+    title?: string;
     createdDate?: Date;
     list?: List[];
 }
 
 export interface List {
-    listId: string
-    listTitle?: string;
+    id?: string
+    title?: string;
     edit?: boolean;
     createdDate?: Date;
     updatedDate?: Date;

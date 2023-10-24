@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { IoIosPeople } from 'react-icons/io';
 import { BsFillPlusSquareFill } from 'react-icons/bs';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { Member } from './types';
 
 interface Props {
     // Define your component props here
@@ -10,36 +13,54 @@ interface Props {
 const BoraddLeftBar: React.FC<Props> = (props) => {
     const [isEdit, setIsEdit] = useState<boolean>(false);
     const [email, setEmail] = useState<string>('');
-    const [membersList, setMembersList] = useState<string[]>([]);
-    const location = useLocation();
-    const boardName = location.state && location.state.alt;
+    const [membersList, setMembersList] = useState<Member[]>([]);
 
+    // const { boardId } = useParams();
+    const location = useLocation();
+    const boardName = location.state && location.state.title;
+
+    const userId = localStorage.getItem('userId');
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
     };
-
-    const handleAddMember = (e: React.FormEvent) => {
+    const handleAddMember = async (e: React.FormEvent, newEmail: string) => {
         e.preventDefault();
-        if (email.trim() !== '') {
-            setMembersList([...membersList, email]);
-            setEmail('');
-            setIsEdit(false);
+        if (newEmail.trim() === '') {
+            console.error('Email is empty. Please enter a valid email.');
+            handleEmailChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
+            return;
+        }
+        try {
+            const response = await axios.post(`http://localhost:5000/members?userId=${userId}`, {
+                email: newEmail,
+            });
+            if (response.status === 201) {
+                const newMember = response.data;
+                handleEmailChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
+                setIsEdit(false);
+                setMembersList([...membersList, newMember]);
+            } else {
+                console.error('Failed to add member.');
+            }
+        } catch (error) {
+            console.error('Error adding member:', error);
         }
     };
 
     useEffect(() => {
-        // Load membersList from localStorage on component mount
-        const storedMembers = localStorage.getItem('membersList');
-        if (storedMembers) {
-            setMembersList(JSON.parse(storedMembers));
-        }
+        const fetchMember = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5000/members`)
+                console.log(response.data);
+
+                const member = response.data;
+                setMembersList(member);
+            }
+            catch (error) {
+                console.error('Error fetching data from the API', error);
+            }
+        }; fetchMember();
     }, []);
-
-    useEffect(() => {
-        // Save membersList to localStorage whenever it changes
-        localStorage.setItem('membersList', JSON.stringify(membersList));
-    }, [membersList]);
-
     return (
         <>
             <div className='backdrop-blur-md w-96 h-full top-[46px] p-5 fixed z-10'>
@@ -56,16 +77,17 @@ const BoraddLeftBar: React.FC<Props> = (props) => {
                     </div>
                 </div>
                 <div className='mt-5'>
-                    {membersList.map((member, index) => (
-                        <h1 key={index} className='text-white'>
-                            {member}
+                    {membersList.map((member) => (
+                        <h1 key={member.id} className='text-white'>
+                            {member.email}
                         </h1>
+
                     ))}
                 </div>
             </div>
             {isEdit && (
                 <div className='fixed top-0 left-0 w-full h-full backdrop-blur-md text-center z-10'>
-                    <form onSubmit={handleAddMember} className='bg-white w-96 h-auto p-5 rounded-md absolute top-[40%] left-[40%]'>
+                    <form onSubmit={(e) => handleAddMember(e, email)} className='bg-white w-96 h-auto p-5 rounded-md absolute top-[40%] left-[40%]'>
                         <label htmlFor="" className=' text-lg font-bold'>Add Member Email</label>
                         <input
                             type="email"

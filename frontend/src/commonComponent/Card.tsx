@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { List, Todo, generateUUID } from '../commonComponent/types';
+import { List, Todo, generateUUID } from './types';
 import {MdModeEditOutline} from 'react-icons/md';
 import TodoComponent from './Todo';
 
 const CardComponent: React.FC = () => {
 	const [list, setList] = useState<List[]>([
 		{
-			listId: generateUUID(),
+			id: generateUUID(),
 			card: [
 				{
 					cardId: generateUUID(),
@@ -19,9 +19,9 @@ const CardComponent: React.FC = () => {
 		},
 	]);
 
-	const handleEditCard = (listId: string, cardId: string) => {
+	const handleEditCard = (id: string | undefined, cardId: string) => {
 		const updatedList = list.map((listItem) => {
-			if (listItem.listId === listId) {
+			if (listItem.id === id) {
 				const updatedCardList = listItem.card?.map((card) => {
 					if (card.cardId === cardId) {
 						if (card.cardTitle === 'Edit Your Card Title') {
@@ -38,38 +38,9 @@ const CardComponent: React.FC = () => {
 		setList(updatedList);
 	};
 
-	const handleCreateTodo = (listId: string, cardId: string) => {
+	const handleUpdateTodo = (id: string | undefined, cardId: string, updatedTodo: Todo) => {
 		const updatedList = list.map((listItem) => {
-			if (listItem.listId === listId) {
-				const updatedCardList = listItem.card?.map((card) => {
-					if (card.cardId === cardId) {
-						const newTodo: Todo = {
-							todoId: generateUUID(),
-							name: 'New Task Name',
-							description: 'New Task Description',
-						};
-						const updatedCard = { ...card };
-
-						if (updatedCard.todos === undefined) {
-							updatedCard.todos = [newTodo];
-						} else {
-							updatedCard.todos.push(newTodo);
-						}
-
-						return updatedCard;
-					}
-					return card;
-				});
-				return { ...listItem, card: updatedCardList };
-			}
-			return listItem;
-		});
-		setList(updatedList);
-	};
-
-	const handleUpdateTodo = (listId: string, cardId: string, updatedTodo: Todo) => {
-		const updatedList = list.map((listItem) => {
-			if (listItem.listId === listId) {
+			if (listItem.id === id) {
 				const updatedCardList = listItem.card?.map((card) => {
 					if (card.cardId === cardId) {
 						const updatedTodos = card.todos?.map((todo) => {
@@ -92,9 +63,9 @@ const CardComponent: React.FC = () => {
 		setList(updatedList);
 	};
 
-	const handleCardTitleChange = (listId: string, cardId: string, event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleCardTitleChange = (id: string | undefined, cardId: string, event: React.ChangeEvent<HTMLInputElement>) => {
 		const updatedList = list.map((listItem) => {
-			if (listItem.listId === listId) {
+			if (listItem.id === id) {
 				const updatedCardList = listItem.card?.map((card) => {
 					if (card.cardId === cardId) {
 						return { ...card, cardTitle: event.target.value };
@@ -108,9 +79,9 @@ const CardComponent: React.FC = () => {
 		setList(updatedList);
 	};
 
-	const handleSaveCard = (listId: string, cardId: string) => {
+	const handleSaveCard = (id: string | undefined, cardId: string) => {
 		const updatedList = list.map((listItem) => {
-			if (listItem.listId === listId) {
+			if (listItem.id === id) {
 				const updatedCardList = listItem.card?.map((card) => {
 					if (card.cardId === cardId) {
 						return { ...card, edit: false };
@@ -127,7 +98,7 @@ const CardComponent: React.FC = () => {
 	return (
 		<>
 			{list.map((column) => (
-				<div key={column.listId} className='my-5'>
+				<div key={column.id} className='my-5'>
 					{column.card?.map((card) => (
 						<div key={card.cardId} className='bg-[#282E33] mb-2 rounded-lg p-3 h-auto break-words relative flex'>
 							{card.edit ? (
@@ -135,30 +106,30 @@ const CardComponent: React.FC = () => {
 									type='text'
 									autoFocus
 									value={card.cardTitle}
-									onChange={(e) => handleCardTitleChange(column.listId, card.cardId, e)}
-									onBlur={() => handleSaveCard(column.listId, card.cardId)}
+									onChange={(e) => handleCardTitleChange(column.id, card.cardId, e)}
+									onBlur={() => handleSaveCard(column.id, card.cardId)}
 									className='text-[#AEB9C5] text-sm bg-transparent outline-none w-full'
 								/>
 							) : (
 								<p
 									className='text-[#AEB9C5] text-sm bg-transparent outline-none w-full cursor-pointer'
-									onClick={() => handleEditCard(column.listId, card.cardId)}
+									onClick={() => handleEditCard(column.id, card.cardId)}
 								>
 									{card.cardTitle}
 								</p>
 							)}
-							<MdModeEditOutline size={20} color='White' onClick={()=>{console.log(column.listId)}}/>
+							<MdModeEditOutline size={20} color='White' onClick={()=>{console.log(column.id)}}/>
 							{card.todos?.map((todo) => (
 								<TodoComponent
 									key={todo.todoId}
 									todo={todo}
 									onUpdateTodo={(updatedTodo) =>
-										handleUpdateTodo(column.listId, card.cardId, updatedTodo)
+										handleUpdateTodo(column.id, card.cardId, updatedTodo)
 									}
 								/>
 
 							))}
-							{/* <button className='w-full text-white hover:text-green-500' onClick={() => handleCreateTodo(column.listId, card.cardId)}>Create new Task</button> */}
+							{/* <button className='w-full text-white hover:text-green-500' onClick={() => handleCreateTodo(column.id, card.cardId)}>Create new Task</button> */}
 						</div>
 					))}
 				</div>

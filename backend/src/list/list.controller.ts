@@ -17,10 +17,10 @@ export class ListController {
     return this.listService.findAll();
   }
 
-  @Get('/board/:boardId')
   @ApiOperation({ summary: 'Get all lists by Board ID' })
   @ApiResponse({ status: 200, description: 'All lists retrieved successfully' })
   @ApiParam({ name: 'boardId', type: 'string' })
+  @Get('/board/:boardId')
   findAllByBoardId(@Param('boardId', ParseUUIDPipe) boardId: string) {
     return this.listService.findAllByBoardId(boardId);
   }

@@ -1,7 +1,7 @@
 import React from 'react';
-import Header from '../component/commonComponent/Header';
+import Header from '../commonComponent/Header';
 import { useLocation } from 'react-router-dom';
-import BoradLeftBar from '../component/commonComponent/BoardLeftBar';
+import BoradLeftBar from '../commonComponent/BoardLeftBar';
 import ListComponent from '../component/List';
 
 

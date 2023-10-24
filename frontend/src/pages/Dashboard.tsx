@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../component/commonComponent/Header';
+import Header from '../commonComponent/Header';
 import DashboardLeftMenu from '../component/DashboardLeftMenu';
 import DashboardRightMenu from '../component/DashboardRightMenu';
 

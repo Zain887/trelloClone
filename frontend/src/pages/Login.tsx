@@ -40,7 +40,8 @@ const Login = () => {
                 } else {
                     console.error('Failed to retrieve user data');
                 }
-                console.log('Form submitted successfully');
+                console.log('Form submitted successfully');            // Update the state with the newly created board
+
                 navigate('/');
             } else {
                 console.error('Form submission failed');
