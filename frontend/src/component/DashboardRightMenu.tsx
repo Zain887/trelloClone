@@ -94,7 +94,6 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
         e.preventDefault();
         addNewBoard();
         setUpdateBoard(false);
-        // saveDataToLocalStorage();
     };
     const userId = localStorage.getItem('userId');
     console.log(userId);
@@ -103,8 +102,6 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
         const fetchMember = async () => {
             try {
                 const response = await axios.get(`http://localhost:5000/members`)
-                console.log(response.data);
-
                 const member = response.data;
                 setMember(member);
             }

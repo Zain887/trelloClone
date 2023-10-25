@@ -97,25 +97,7 @@ const ListComponent: React.FC = () => {
             console.error('Error updating list title:', error);
         }
     };
-
-    const addNewCard = (id: string | undefined) => {
-        const updatedList = list.map((listItem) => {
-            if (listItem.id === id) {
-                const newCardTitle = `card${listItem.card ? listItem.card.length + 1 : 1}`;
-                if (!listItem.card) {
-                    listItem.card = [];
-                }
-                listItem.card.push({
-                    cardTitle: newCardTitle,
-                    edit: false,
-                    cardId: generateUUID(),
-                });
-            }
-            return listItem;
-        });
-        setList(updatedList);
-    };
-
+    
     const deleteList = async (id: string | undefined) => {
         try {
             const response = await axios.delete(`http://localhost:5000/list/${id}`);
@@ -139,29 +121,6 @@ const ListComponent: React.FC = () => {
             console.log('noMatched');
         }
     }
-
-    const onDragEnd = (result: DropResult) => {
-        if (!result.destination) return;
-        const { source, destination } = result;
-        if (source.droppableId === destination.droppableId && source.index === destination.index) {
-            return;
-        }
-        const updatedList = list.map(listItem => ({
-            ...listItem,
-            card: listItem.card ? [...listItem.card] : undefined,
-        }));
-        const sourceList = updatedList[Number(source.droppableId)];
-        const destList = updatedList[Number(destination.droppableId)];
-        if (!sourceList || !destList) {
-            return;
-        }
-        if (sourceList.card && destList.card) {
-            const movedCard = sourceList.card[source.index];
-            sourceList.card.splice(source.index, 1);
-            destList.card.splice(destination.index, 0, movedCard);
-        }
-        setList(updatedList);
-    };
 
     return (
         <div className='inline-flex items-start'>
@@ -195,37 +154,7 @@ const ListComponent: React.FC = () => {
                             </div>
                         )}
                     </div>
-                    <div className='md:max-h-[698px] overflow-y-scroll'>
-                        <DragDropContext onDragEnd={onDragEnd}>
-                            <Droppable droppableId="droppable">
-                                {(provided, snapshot) => (
-                                    <div ref={provided.innerRef} {...provided.droppableProps}>
-                                        {list.card?.map((item, index) => (
-                                            <Draggable key={item.cardId} draggableId={item.cardId.toString()} index={index}>
-                                                {(provided, snapshot) => (
-                                                    <div
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                    >
-                                                        <CardComponent key={item.cardId} /* Pass data to your CardComponent here */ />
-                                                    </div>
-                                                )}
-                                            </Draggable>
-                                        ))}
-                                        {provided.placeholder}
-                                    </div>
-                                )}
-                            </Droppable>
-                        </DragDropContext>
-                    </div>
-                    <div className='flex justify-between items-center pt-3'>
-                        <div className='flex items-center gap-2 cursor-pointer text-[#AEB9C5] hover:text-red-500' onClick={() => addNewCard(list.id)}>
-                            <p className='text-lg'>+</p>
-                            <p className='text-sm'>Add a Card</p>
-                        </div>
-                        <img className='md:w-5 md:h-5 hover:bg-red-500 rounded-sm cursor-pointer' src='/assetes/addform.svg' alt='more' />
-                    </div>
+                    <CardComponent listID={list.id} />
                 </div>
             ))}
             <button className='bg-blue-500 w-[179px] mx-3 px-6 h-12 rounded-lg font-bold hover:text-orange-600 hover:bg-black' onClick={handleAddNewListClick}>

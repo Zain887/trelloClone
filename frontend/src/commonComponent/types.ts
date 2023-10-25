@@ -48,25 +48,23 @@ export interface List {
 }
 
 export interface Card {
-    cardId: string;
-    cardTitle: string;
+    id: string;
+    title: string;
+    description: string;
     edit: boolean;
     createTodo?: boolean;
     todos?: Todo[];
 }
 
 export interface Todo {
-    todoId: string;
-    name?: string;
-    description?:string;
-    todoItem?: TodoItem[];
+    id: string;
+    title?: string;
+    todoitem?:TodoItem[];
 }
 
 export interface TodoItem {
-    todoItemid: string;
-    title: string;
-    isCompleted: boolean;
-    edit?: boolean;
+    id: string;
+    text: string;
     status?:Enum;
     comments?: Comment[];
 }
