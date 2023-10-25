@@ -1,47 +1,69 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Todo, generateUUID } from './types';
 import { IoMdCloseCircle } from 'react-icons/io';
 import TodoItemComponent from './TodoItem';
+import axios from 'axios';
+import { MdDelete } from 'react-icons/md';
 
-interface TodoComponentProps { }
+interface TodoComponentProps {
+    cardId: string | undefined;
+    close: () => void;
+}
 
-const TodoComponent: React.FC<TodoComponentProps> = () => {
-    const [todoList, setTodoList] = useState<Todo[]>([
-        {
-            id: generateUUID(),
-            title: 'Todo 1',
-        },
-        {
-            id: generateUUID(),
-            title: 'Todo 2',
-        },
-    ]);
-
+const TodoComponent: React.FC<TodoComponentProps> = ({ cardId, close }) => {
+    const [todoList, setTodoList] = useState<Todo[]>([]);
     const [newTodo, setNewTodo] = useState<string>('');
-
-    const addTodo = () => {
-        if (newTodo) {
-            const newTodoItem: Todo = {
-                id: generateUUID(),
-                title: newTodo,
-            };
-            setTodoList((prevTodoList) => [...prevTodoList, newTodoItem]);
-            setNewTodo(''); // Clear the input field after adding a todo.
+    useEffect(() => {
+        const fetchTodo = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5000/todo/card/${cardId}`);
+                const listData = response.data;
+                setTodoList(listData);
+            } catch (error) {
+                console.error('Error fetching data from the API', error);
+            }
+        };
+        if (cardId) {
+            fetchTodo();
+        }
+    }, [])
+    const addTodo = async () => {
+        try {
+            if (newTodo) {
+                const response = await axios.post(`http://localhost:5000/todo/${cardId}`, {
+                    title: newTodo,
+                });
+                const newTodoItem: Todo = response.data;
+                setTodoList((prevTodoList) => [...prevTodoList, newTodoItem]);
+                setNewTodo('');
+            }
+        } catch (error) {
+            console.error('Error adding todo:', error);
         }
     };
-
+    const deleteTodoItem = async (id: string) => {
+        try {
+            await axios.delete(`http://localhost:5000/todo/${id}`);
+            setTodoList((prevTodoList) => prevTodoList.filter((item) => item.id !== id));
+        } catch (error) {
+            console.error(error);
+        }
+    }
     return (
         <>
             <div className='fixed backdrop-blur-md w-full h-full top-0 left-0 z-10'>
                 <div className='bg-white rounded-md w-[500px] h-auto p-5 top-[15%] absolute left-[35%]'>
-                    <h1 className='flex items-center justify-between font-bold'>Todo List <span><IoMdCloseCircle size={25} color='red' /></span></h1>
-                    <div className='mb-5 h-[570px] overflow-y-auto'>
+                    <h1 className='flex items-center justify-between font-bold'>Todo List <span onClick={close}><IoMdCloseCircle size={25} color='red' /></span></h1>
+                    <div className='mb-5 max-h-[570px] overflow-y-auto'>
                         {todoList.map((item) => (
-                            <div className='border-2 p-2 rounded-md my-2'>
-                                <div key={item.id}>
+                            <div key={item.id} className='border-2 p-2 rounded-md my-2'>
+                                <div className='flex items-center justify-between mb-4'>
                                     <p>{item.title}</p>
+                                    <div className='cursor-pointer' onClick={() => deleteTodoItem(item.id)}>
+                                        <MdDelete size={20} color='red' />
+                                    </div>
                                 </div>
-                                <TodoItemComponent />
+                                <TodoItemComponent todoId={item.id} cardId={cardId} />
                             </div>
                         ))}
                     </div>

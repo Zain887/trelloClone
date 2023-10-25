@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from '../commonComponent/types';
-import { MdModeEditOutline } from 'react-icons/md';
+import { MdModeEditOutline, MdDelete } from 'react-icons/md';
 import axios from 'axios';
 import TodoComponent from './Todo';
 
@@ -11,9 +11,10 @@ interface CardComponentProps {
 const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 	const [card, setCard] = useState<Card[]>([]);
 	const [cardTitle, setCardTitle] = useState('');
+	const [currentCardId, setCurrentCardId] = useState('');
 	const [isFormOpen, setIsFormOpen] = useState(false);
 	const [cardDescription, setCardDescription] = useState('');
-
+	const [todoPop, setTodoPop] = useState(false);
 	const handleEditClick = () => {
 		setIsFormOpen(true);
 	};
@@ -59,14 +60,35 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 			console.error('Error sending data:', error);
 		}
 	};
+	const deleteTodoItem = async (id: string) => {
+		try {
+			await axios.delete(`http://localhost:5000/card/${id}`);
+			setCard((prevTodoList) => prevTodoList.filter((item) => item.id !== id));
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
+	const openTodoForCard = (id:string) => {
+		setCurrentCardId(id)
+		const cardToOpen = card.find((item) => item.id === id);
+		if (cardToOpen) {
+			setTodoPop(true);
+		}
+	};
+
+	const closeTodoPop = () => {
+		setTodoPop(false);
+	}
 	return (
 		<>
 			<div className='md:max-h-[698px] overflow-y-scroll'>
 				<div className='my-5'>
 					{card.map((item) => (
 						<div key={item.id} className='bg-[#282E33] mb-2 rounded-lg p-3 h-auto break-words relative'>
-							<div className='float-right'>
-								<MdModeEditOutline size={20} color='White' />
+							<div className='float-right flex gap-2'>
+								<MdModeEditOutline size={20} color='White' className='cursor-pointer' onClick={() => openTodoForCard(item.id)} />
+								<MdDelete size={20} color='red' className='cursor-pointer' onClick={() => deleteTodoItem(item.id)} />
 							</div>
 							<p className='text-[#AEB9C5] text-sm bg-transparent outline-none w-full cursor-pointer'>
 								{item.title}
@@ -74,9 +96,11 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 							<p className='text-[#AEB9C5] text-sm bg-transparent outline-none w-full cursor-pointer'>
 								{item.description}
 							</p>
-							<TodoComponent/>
 						</div>
 					))}
+					{todoPop && (
+						<TodoComponent cardId={currentCardId} close={closeTodoPop} />
+					)}
 				</div>
 				{isFormOpen && (
 					<div className='h-full w-full fixed top-0 left-0 backdrop-blur-md z-10'>

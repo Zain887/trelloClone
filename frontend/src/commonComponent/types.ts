@@ -1,12 +1,6 @@
 // types.ts
 import { v4 as uuidv4 } from 'uuid';
 
-export enum Enum {
-    pending,
-    Inprogress,
-    Complete,
-}
-
 export interface User {
     id: number;
     userid: number;
@@ -65,7 +59,7 @@ export interface Todo {
 export interface TodoItem {
     id: string;
     text: string;
-    status?:Enum;
+    status: string;
     comments?: Comment[];
 }
 
