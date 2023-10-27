@@ -3,7 +3,8 @@ import { Card } from '../commonComponent/types';
 import { MdModeEditOutline, MdDelete } from 'react-icons/md';
 import axios from 'axios';
 import TodoComponent from './Todo';
-import { CgClose} from 'react-icons/cg';
+import { CgClose } from 'react-icons/cg';
+import OneSpotAccess from '../modal/OneSpotAccess';
 
 interface CardComponentProps {
 	listID: string | undefined;
@@ -14,7 +15,7 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 	const [cardTitle, setCardTitle] = useState('');
 	const [currentCardId, setCurrentCardId] = useState('');
 	const [isFormOpen, setIsFormOpen] = useState(false);
-	const [todoPop, setTodoPop] = useState(false);
+	const [currentCardTitle, setCurrentCardTitle] = useState('');
 
 	const handleEditClick = () => {
 		setIsFormOpen(true);
@@ -73,14 +74,18 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 		setCurrentCardId(id)
 		const cardToOpen = card.find((item) => item.id === id);
 		if (cardToOpen) {
-			setTodoPop(true);
+			setCurrentCardTitle(cardToOpen.title);
+			openModal();
 		}
 	};
 
-	const closeTodoPop = () => {
-		setTodoPop(false);
-	}
-
+	const [isModalOpen, setModalOpen] = useState(false);
+	const openModal = () => {
+		setModalOpen(true);
+	};
+	const closeModal = () => {
+		setModalOpen(false);
+	};
 	return (
 		<>
 			<div className='md:max-h-[698px] overflow-y-scroll'>
@@ -96,9 +101,7 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 							</p>
 						</div>
 					))}
-					{todoPop && (
-						<TodoComponent cardId={currentCardId} close={closeTodoPop} />
-					)}
+					<OneSpotAccess isModalOpen={isModalOpen} onRequestClose={closeModal} cardTitle={currentCardTitle} />
 				</div>
 				{isFormOpen ? (
 					<div className='h-auto w-full'>

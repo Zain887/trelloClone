@@ -8,30 +8,32 @@ import { LuMoveRight } from 'react-icons/lu';
 import { MdOutlineContentCopy, MdOutlineArchive } from 'react-icons/md';
 import { BsFillPersonFill, BsTagFill, BsCheckSquareFill, BsClockFill, BsFillCreditCard2BackFill, BsFillShareFill, BsEye, BsTextParagraph } from 'react-icons/bs';
 import { HiTemplate } from 'react-icons/hi';
-import { RxActivityLog } from 'react-icons/rx';
 import Comment from '../component/Comment';
 
 Modal.setAppElement('#root');
 
-const OneSpotAccess = () => {
-    const [isModalOpen, setModalOpen] = useState(true);
-    const closeModal = () => {
-        setModalOpen(false);
-    };
-    
+
+interface OneSpotAccessProps {
+    isModalOpen?: boolean;
+    onRequestClose: () => void;
+    cardTitle: string;
+}
+
+const OneSpotAccess: React.FC<OneSpotAccessProps> = ({ isModalOpen = false, onRequestClose, cardTitle }) => {
+
     return (
         <Modal
             isOpen={isModalOpen}
-            onRequestClose={closeModal}
+            onRequestClose={onRequestClose}
             contentLabel="Example Modal"
             className='w-[800px] bg-[#F1F2F4] rounded-md border-none p-5 outline-none'
         >
             <div className='flex items-start justify-between mb-5'>
                 <div className='flex items-start'>
                     <PiCreditCardFill size={20} color='black' className='cursor-pointer' />
-                    <p className=' text-xl text-[#263858] font-bold pl-4'>CardName <br /> <span className='text-sm font-normal leading-[2px]'>In list <u>list Progress-Bugs</u></span></p>
+                    <p className=' text-xl text-[#263858] font-bold pl-4'>{cardTitle}<br /> <span className='text-sm font-normal leading-[2px]'>In list <u>list Progress-Bugs</u></span></p>
                 </div>
-                <CgClose size={20} color='black' onClick={closeModal} className=' hover:bg-red-200 hover:rounded-xl cursor-pointer' />
+                <CgClose size={20} color='black' onClick={onRequestClose} className=' hover:bg-red-200 hover:rounded-xl cursor-pointer' />
             </div>
             <div className='flex items-start gap-5 justify-between'>
                 <div className='w-[80%]'>
@@ -51,7 +53,7 @@ const OneSpotAccess = () => {
                     <div className='pl-[30px]'>
                         <p className='text-sm h-14 bg-[#E4E6EA] p-2 rounded-sm w-full hover:bg-gray-300 cursor-pointer'>Add a more detailed description....</p>
                     </div>
-                    <Comment/>
+                    <Comment />
                 </div>
                 <div className='w-[20%]'>
                     <div className='mb-3'>
