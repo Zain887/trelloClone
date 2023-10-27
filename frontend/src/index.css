@@ -39,3 +39,10 @@ code {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.ReactModal__Overlay--after-open{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 30;
+}
