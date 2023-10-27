@@ -3,6 +3,7 @@ import { Card } from '../commonComponent/types';
 import { MdModeEditOutline, MdDelete } from 'react-icons/md';
 import axios from 'axios';
 import TodoComponent from './Todo';
+import { CgClose} from 'react-icons/cg';
 
 interface CardComponentProps {
 	listID: string | undefined;
@@ -13,8 +14,8 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 	const [cardTitle, setCardTitle] = useState('');
 	const [currentCardId, setCurrentCardId] = useState('');
 	const [isFormOpen, setIsFormOpen] = useState(false);
-	const [cardDescription, setCardDescription] = useState('');
 	const [todoPop, setTodoPop] = useState(false);
+
 	const handleEditClick = () => {
 		setIsFormOpen(true);
 	};
@@ -36,19 +37,17 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (!cardTitle || !cardDescription) {
-			console.log('Card title and description are required.');
+		if (!cardTitle) {
+			console.log('Card title is required.');
 			return;
 		}
 		try {
 			const response = await axios.post(`http://localhost:5000/card/${listID}`, {
 				title: cardTitle,
-				description: cardDescription,
 			});
 			if (response.status === 201) {
 				console.log('Data sent successfully.');
 				setCardTitle('');
-				setCardDescription('');
 				setIsFormOpen(false);
 				const updatedResponse = await axios.get(`http://localhost:5000/card/list/${listID}`);
 				const updatedListData = updatedResponse.data;
@@ -60,6 +59,7 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 			console.error('Error sending data:', error);
 		}
 	};
+
 	const deleteTodoItem = async (id: string) => {
 		try {
 			await axios.delete(`http://localhost:5000/card/${id}`);
@@ -69,7 +69,7 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 		}
 	}
 
-	const openTodoForCard = (id:string) => {
+	const openTodoForCard = (id: string) => {
 		setCurrentCardId(id)
 		const cardToOpen = card.find((item) => item.id === id);
 		if (cardToOpen) {
@@ -80,6 +80,7 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 	const closeTodoPop = () => {
 		setTodoPop(false);
 	}
+
 	return (
 		<>
 			<div className='md:max-h-[698px] overflow-y-scroll'>
@@ -93,58 +94,44 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 							<p className='text-[#AEB9C5] text-sm bg-transparent outline-none w-full cursor-pointer'>
 								{item.title}
 							</p>
-							<p className='text-[#AEB9C5] text-sm bg-transparent outline-none w-full cursor-pointer'>
-								{item.description}
-							</p>
 						</div>
 					))}
 					{todoPop && (
 						<TodoComponent cardId={currentCardId} close={closeTodoPop} />
 					)}
 				</div>
-				{isFormOpen && (
-					<div className='h-full w-full fixed top-0 left-0 backdrop-blur-md z-10'>
-						<form onSubmit={handleSubmit} className='bg-white w-[500px] h-auto p-5 rounded-md shadow-md absolute top-[35%] left-[35%]'>
-							<label htmlFor='cardTitle' className='block text-gray-700 text-sm font-bold'>Card Title</label>
-							<input
-								type='text'
+				{isFormOpen ? (
+					<div className='h-auto w-full'>
+						<form onSubmit={handleSubmit} className='h-auto'>
+							<textarea
+								placeholder='Edit a title for this card...'
 								id='cardTitle'
 								name='cardTitle'
 								value={cardTitle}
 								onChange={(e) => setCardTitle(e.target.value)}
-								className='w-full px-3 py-2 mt-2 text-gray-700 rounded-md border border-gray-300 focus:outline-none focus:ring focus:ring-blue-400'
+								className='outline-none w-full px-3 py-2 mt-2 text-gray-700 rounded-md border border-gray-300'
 							/>
-							<label htmlFor='cardDescription' className='block text-gray-700 text-sm font-bold mt-4'>Card Description</label>
-							<input
-								type='text'
-								id='cardDescription'
-								name='cardDescription'
-								value={cardDescription}
-								onChange={(e) => setCardDescription(e.target.value)}
-								className='w-full px-3 py-2 mt-2 text-gray-700 rounded-md border border-gray-300 focus:outline-none focus:ring focus:ring-blue-400'
-							/>
-							<div className='flex justify-between items-center'>
+							<div className='flex items-center gap-4'>
 								<button
 									type='submit'
-									className='mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700'>
-									Create
+									className='bg-blue-500 text-white font-bold py-1 px-2 text-sm rounded-sm hover:bg-blue-700'>
+									Add card
 								</button>
-								<button
-									className='mt-4 ml-2 text-red-500 font-bold py-2 px-4 rounded-md hover:bg-red-100' onClick={() => setIsFormOpen(false)}>
-									Cancel
-								</button>
+								<CgClose size={20} color='White' onClick={() => setIsFormOpen(false)} className=' hover:bg-red-200 hover:rounded-sm cursor-pointer' />
 							</div>
 						</form>
 					</div>
+				) : (
+					<div className='flex justify-between items-center pt-3'>
+						<div className='flex items-center gap-2 cursor-pointer text-[#AEB9C5] hover-text-red-500' onClick={handleEditClick}>
+							<p className='text-lg'>+</p>
+							<p className='text-sm'>Add a Card</p>
+						</div>
+						<img className='md:w-5 md:h-5 hover-bg-red-500 rounded-sm cursor-pointer' src='/assetes/addform.svg' alt='more' />
+					</div>
 				)}
 			</div>
-			<div className='flex justify-between items-center pt-3'>
-				<div className='flex items-center gap-2 cursor-pointer text-[#AEB9C5] hover:text-red-500' onClick={handleEditClick}>
-					<p className='text-lg'>+</p>
-					<p className='text-sm'>Add a Card</p>
-				</div>
-				<img className='md:w-5 md:h-5 hover:bg-red-500 rounded-sm cursor-pointer' src='/assetes/addform.svg' alt='more' />
-			</div>
+
 		</>
 	);
 };
