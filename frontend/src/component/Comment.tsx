@@ -17,9 +17,7 @@ const CommentComponent: React.FC<Props> = ({ cardID }) => {
     const [userID, setUserID] = useState<string | null>(null);
 
     useEffect(() => {
-        // Fetch comments when the component mounts
         fetchComments();
-        // Get the user ID from local storage
         const storedUserID = localStorage.getItem('userId');
         setUserID(storedUserID);
     }, [cardID]);
@@ -52,30 +50,7 @@ const CommentComponent: React.FC<Props> = ({ cardID }) => {
     };
 
     const handleEditComment = async (id: string) => {
-        if (editComment.trim() === '') {
-            return;
-        }
 
-        try {
-            const response = await axios.patch(`http://localhost:5000/comment/${id}`, {
-                comment: editComment, // Send the edited comment
-            });
-
-            if (response.status === 200) {
-                // Replace the edited comment in the client-side comments
-                const updatedComments = comments.map((c) =>
-                    c.id === id ? { ...c, comment: editComment } : c
-                );
-                setComments(updatedComments);
-                setEditingCommentID(null); // Clear editing state
-                setIsEditing(false);
-                setEditComment(''); // Clear the edited comment text
-            } else {
-                console.error('Failed to save the edited comment.');
-            }
-        } catch (error) {
-            console.error('Error saving the edited comment:', error);
-        }
     };
 
     const handleDeleteComment = async (id: string) => {

@@ -25,11 +25,11 @@ const CardDescription: React.FC<Props> = ({ cardID }) => {
         fetchDescription();
     }, [cardID]);
 
-    const handleEditClick = () => {
+    const updateDescription = () => {
         setIsEditing(true);
     };
 
-    const handleSaveClick = async () => {
+    const updateDescriptionSave = async () => {
         try {
             const response = await axios.patch(`http://localhost:5000/card/${cardID}`, {
                 description: description,
@@ -45,7 +45,7 @@ const CardDescription: React.FC<Props> = ({ cardID }) => {
     };
 
 
-    const handleCancelClick = () => {
+    const cancelDescriptionUpdate = () => {
         setIsEditing(false);
     };
 
@@ -68,14 +68,14 @@ const CardDescription: React.FC<Props> = ({ cardID }) => {
                         className='text-sm bg-[#E4E6EA] p-2 rounded-sm w-full hover:bg-gray-300 cursor-pointer'
                     ></textarea>
                     <div className='mt-2'>
-                        <button onClick={handleSaveClick} className='bg-blue-500 text-white text-sm px-2 py-1 rounded-sm mr-2'>Save</button>
-                        <button onClick={handleCancelClick} className='hover:bg-gray-300 text-black px-2 text-sm py-1 rounded-sm'>Cancel</button>
+                        <button onClick={updateDescriptionSave} className='bg-blue-500 text-white text-sm px-2 py-1 rounded-sm mr-2'>Save</button>
+                        <button onClick={cancelDescriptionUpdate} className='hover:bg-gray-300 text-black px-2 text-sm py-1 rounded-sm'>Cancel</button>
                     </div>
                 </div>
             ) : (
                 <div className='pl-[30px]'>
                     <p
-                        onClick={handleEditClick}
+                        onClick={updateDescription}
                         className='text-sm min-h-14 bg-[#E4E6EA] p-2 rounded-sm w-full hover:bg-gray-300 cursor-pointer'
                     >
                         {description}

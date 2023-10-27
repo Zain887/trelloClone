@@ -17,7 +17,7 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 	const [isFormOpen, setIsFormOpen] = useState(false);
 	const [currentCardTitle, setCurrentCardTitle] = useState('');
 
-	const handleEditClick = () => {
+	const cardTitleEdit = () => {
 		setIsFormOpen(true);
 	};
 
@@ -25,8 +25,8 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 		const fetchCard = async () => {
 			try {
 				const response = await axios.get(`http://localhost:5000/card/list/${listID}`);
-				const listData = response.data;
-				setCard(listData);
+				const cardData = response.data;
+				setCard(cardData);
 			} catch (error) {
 				console.error('Error fetching data from the API', error);
 			}
@@ -36,7 +36,7 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 		}
 	}, []);
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	const AddnewCard = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!cardTitle) {
 			console.log('Card title is required.');
@@ -70,7 +70,7 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 		}
 	}
 
-	const openTodoForCard = (id: string) => {
+	const openCardController = (id: string) => {
 		setCurrentCardId(id)
 		const cardToOpen = card.find((item) => item.id === id);
 		if (cardToOpen) {
@@ -93,7 +93,7 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 					{card.map((item) => (
 						<div key={item.id} className='bg-[#282E33] mb-2 rounded-lg p-3 h-auto break-words relative'>
 							<div className='float-right flex gap-2'>
-								<MdModeEditOutline size={20} color='White' className='cursor-pointer' onClick={() => openTodoForCard(item.id)} />
+								<MdModeEditOutline size={20} color='White' className='cursor-pointer' onClick={() => openCardController(item.id)} />
 								<MdDelete size={20} color='red' className='cursor-pointer' onClick={() => deleteTodoItem(item.id)} />
 							</div>
 							<p className='text-[#AEB9C5] text-sm bg-transparent outline-none w-full cursor-pointer'>
@@ -105,7 +105,7 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 				</div>
 				{isFormOpen ? (
 					<div className='h-auto w-full'>
-						<form onSubmit={handleSubmit} className='h-auto'>
+						<form onSubmit={AddnewCard} className='h-auto'>
 							<textarea
 								placeholder='Edit a title for this card...'
 								id='cardTitle'
@@ -126,7 +126,7 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 					</div>
 				) : (
 					<div className='flex justify-between items-center pt-3'>
-						<div className='flex items-center gap-2 cursor-pointer text-[#AEB9C5] hover-text-red-500' onClick={handleEditClick}>
+						<div className='flex items-center gap-2 cursor-pointer text-[#AEB9C5] hover-text-red-500' onClick={cardTitleEdit}>
 							<p className='text-lg'>+</p>
 							<p className='text-sm'>Add a Card</p>
 						</div>
