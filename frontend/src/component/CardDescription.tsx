@@ -15,7 +15,7 @@ const CardDescription: React.FC<Props> = ({ cardID }) => {
             try {
                 const response = await axios.get(`http://localhost:5000/card/${cardID}`);
                 if (response.status === 200) {
-                    setDescription(response.data.description);
+                    setDescription(response.data.description || "Add a more detailed description...");
                 }
             } catch (error) {
                 console.error('Error fetching description:', error);

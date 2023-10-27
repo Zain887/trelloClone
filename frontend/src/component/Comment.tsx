@@ -11,9 +11,7 @@ const CommentComponent: React.FC<Props> = ({ cardID }) => {
     const [hideBtn, setHideBtn] = useState<string>('Hide Details');
     const [isEditing, setIsEditing] = useState(false);
     const [comment, setComment] = useState<string>('');
-    const [editComment, setEditComment] = useState<string>('');
     const [comments, setComments] = useState<Comment[]>([]);
-    const [editingCommentID, setEditingCommentID] = useState<string | null>(null);
     const [userID, setUserID] = useState<string | null>(null);
 
     useEffect(() => {
@@ -71,12 +69,10 @@ const CommentComponent: React.FC<Props> = ({ cardID }) => {
         if (comment.trim() === '') {
             return;
         }
-
         try {
             const response = await axios.post(`http://localhost:5000/comment/card/${cardID}?userId=${userID}`, {
                 comment: comment,
             });
-
             if (response.status === 201) {
                 setComments((prevComments) => [...prevComments, response.data]);
                 setIsEditing(false);
