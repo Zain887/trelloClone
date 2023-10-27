@@ -65,9 +65,7 @@ export interface TodoItem {
 
 export interface Comment {
     id: string;
-    description: string;
-    cardID: string;
-    memberID: string;
+    comment: string;
 }
 
 export interface Attechment {

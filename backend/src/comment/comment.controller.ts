@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
@@ -18,7 +18,7 @@ export class CommentController {
   @ApiBadRequestResponse({ description: 'Bad request' }) 
   @Post('card/:id')
   create(
-    @Param('id') cardId: string, @User('userId') userId: string, @Body() data: CreateCommentDto,
+    @Param('id') cardId: string, @Query('userId') userId: string, @Body() data: CreateCommentDto,
   ) {
     return this.commentService.create(cardId, userId, data);
   }
@@ -29,6 +29,15 @@ export class CommentController {
   findAll() {
     return this.commentService.findAll();
   }
+
+
+  @ApiOperation({summary: 'Get all Comment by CardID'})
+  @ApiResponse({status: 200, description: 'All commnet retrived successfully'})
+  @Get('card/:cardID')
+  findAllByCardID(@Param('cardID') cardId: string){
+    return this.commentService.findAllByCardId(cardId);
+  }
+
 
   @ApiOperation({ summary: 'Get a comment by ID' }) 
   @ApiParam({ name: 'id', type: 'string' }) 

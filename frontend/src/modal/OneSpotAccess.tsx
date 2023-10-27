@@ -6,9 +6,10 @@ import { PiCreditCardFill } from 'react-icons/pi';
 import { HiRectangleStack } from 'react-icons/hi2';
 import { LuMoveRight } from 'react-icons/lu';
 import { MdOutlineContentCopy, MdOutlineArchive } from 'react-icons/md';
-import { BsFillPersonFill, BsTagFill, BsCheckSquareFill, BsClockFill, BsFillCreditCard2BackFill, BsFillShareFill, BsEye, BsTextParagraph } from 'react-icons/bs';
+import { BsFillPersonFill, BsTagFill, BsCheckSquareFill, BsClockFill, BsFillCreditCard2BackFill, BsFillShareFill, BsEye, } from 'react-icons/bs';
 import { HiTemplate } from 'react-icons/hi';
 import Comment from '../component/Comment';
+import CardDescription from '../component/CardDescription';
 
 Modal.setAppElement('#root');
 
@@ -17,9 +18,10 @@ interface OneSpotAccessProps {
     isModalOpen?: boolean;
     onRequestClose: () => void;
     cardTitle: string;
+    cardId: string;
 }
 
-const OneSpotAccess: React.FC<OneSpotAccessProps> = ({ isModalOpen = false, onRequestClose, cardTitle }) => {
+const OneSpotAccess: React.FC<OneSpotAccessProps> = ({ isModalOpen = false, onRequestClose, cardTitle, cardId }) => {
 
     return (
         <Modal
@@ -46,14 +48,8 @@ const OneSpotAccess: React.FC<OneSpotAccessProps> = ({ isModalOpen = false, onRe
                             Watch
                         </p>
                     </div>
-                    <div className='flex items-start mb-3'>
-                        <BsTextParagraph size={20} />
-                        <p className='pl-2 font-bold text-[#263858] text-lg'>Description</p>
-                    </div>
-                    <div className='pl-[30px]'>
-                        <p className='text-sm h-14 bg-[#E4E6EA] p-2 rounded-sm w-full hover:bg-gray-300 cursor-pointer'>Add a more detailed description....</p>
-                    </div>
-                    <Comment />
+                    <CardDescription cardID={cardId}/>
+                    <Comment cardID={cardId}/>
                 </div>
                 <div className='w-[20%]'>
                     <div className='mb-3'>

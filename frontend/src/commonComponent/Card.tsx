@@ -101,7 +101,7 @@ const CardComponent: React.FC<CardComponentProps> = ({ listID }) => {
 							</p>
 						</div>
 					))}
-					<OneSpotAccess isModalOpen={isModalOpen} onRequestClose={closeModal} cardTitle={currentCardTitle} />
+					<OneSpotAccess isModalOpen={isModalOpen} onRequestClose={closeModal} cardTitle={currentCardTitle} cardId={currentCardId}/>
 				</div>
 				{isFormOpen ? (
 					<div className='h-auto w-full'>

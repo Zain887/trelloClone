@@ -35,6 +35,11 @@ export class CommentService {
   async findOne(id: string) {
     return await this.commentRepository.findOne({ where: { id } });
   }
+
+  async findAllByCardId(cardId: string): Promise<CommentEntity[]> {
+    return this.commentRepository.find({ where: { card: { id: cardId } } });
+  }
+
   async findOrThrowError(id: string) {
     try {
       const comment = await this.findOne(id);
