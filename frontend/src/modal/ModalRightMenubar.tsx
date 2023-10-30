@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CgClose, CgAttachment } from 'react-icons/cg';
 import { IoIosSettings, IoMdAdd, IoIosInformationCircleOutline } from 'react-icons/io';
 import { HiRectangleStack } from 'react-icons/hi2';
@@ -12,12 +12,12 @@ interface Props {
 }
 
 const ModalRightMenubar: React.FC<Props> = (props) => {
-    const [CheckList, setCheckList] = useState<boolean>(false);
+    const [checkList, setCheckList] = useState<boolean>(false);
 
-    const closeChecklist = () => {
-        setCheckList(false);
-        console.log('hello');
+    const toggleChecklist = () => {
+        setCheckList(!checkList);
     };
+    
     return (
         <>
             <div className='mb-3'>
@@ -42,16 +42,18 @@ const ModalRightMenubar: React.FC<Props> = (props) => {
                     <BsTagFill size={16} className='-rotate-90' />
                     Labels
                 </p>
-                <div className='relative' onClick={() => setCheckList(true)}>
+                <div className='relative' onClick={toggleChecklist}>
                     <p className='text-[14px] flex items-center gap-2 bg-[#E4E6EA] hover-bg-gray-300 cursor-pointer rounded-sm mt-2 px-2 py-1'>
                         <BsCheckSquareFill size={16} />
                         Checklist
                     </p>
-                    {CheckList && (
+                    {checkList && (
                         <div className='h-auto bg-white w-80 rounded-md absolute top-[35px] right-[-170px] z-10 p-5'>
                             <div className='flex items-center justify-between'>
                                 <p className='text-sm'>Add Checklist</p>
-                                <CgClose size={20} color='black' className='hover-bg-gray-200 hover-rounded cursor-pointer' onClick={closeChecklist} />
+                                <div onClick={toggleChecklist}>
+                                    <CgClose size={20} color='black' className='hover-bg-gray-200 hover-rounded cursor-pointer' />
+                                </div>
                             </div>
                             <label htmlFor="">Title</label>
                             <input type="text" className='w-full h-10 border-2 outline-none px-2 rounded-md' />

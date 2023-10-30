@@ -53,6 +53,7 @@ const DashboardRightMenu: React.FC<Props> = (props) => {
             const updateRecentView = { src: '/images/art-bg2.jpg', title, boardId };
             recentView.push(updateRecentView);
             setRecentView([...recentView].splice(-4));
+            // saveDataToLocalStorage();
         }
     };
 

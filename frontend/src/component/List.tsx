@@ -30,7 +30,8 @@ const ListComponent: React.FC = () => {
             const response = await axios.post(`http://localhost:5000/list/${boardId}`, {
                 title: title,
             });
-            const newList = response.data;
+
+            const newList = response?.data;
             setList((prevLists) => [...prevLists, newList]);
         } catch (error) {
             console.error('Error adding a new list', error);
@@ -58,6 +59,7 @@ const ListComponent: React.FC = () => {
     };
 
     const deleteList = async (id: string | undefined) => {
+ 
         try {
             const response = await axios.delete(`http://localhost:5000/list/${id}`);
             if (response.status === 200) {
