@@ -12,12 +12,27 @@ interface Props {
 }
 
 const ModalRightMenubar: React.FC<Props> = (props) => {
-    const [checkList, setCheckList] = useState<boolean>(false);
+    const [inputValue, setInputValue] = useState('');
+    const [popupVisible, setPopupVisible] = useState(false);
 
-    const toggleChecklist = () => {
-        setCheckList(!checkList);
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = e.target.value;
+        setInputValue(newValue);
     };
-    
+
+    const handleAddClick = () => {
+        if (inputValue.trim() === "") {
+            return
+        }
+        setInputValue('');
+    };
+
+    const handlePopupClose = () => {
+        if (popupVisible === true) {
+            setPopupVisible(false);
+        }
+        console.log(popupVisible)
+    };
     return (
         <>
             <div className='mb-3'>
@@ -42,22 +57,33 @@ const ModalRightMenubar: React.FC<Props> = (props) => {
                     <BsTagFill size={16} className='-rotate-90' />
                     Labels
                 </p>
-                <div className='relative' onClick={toggleChecklist}>
+                <div className='relative' onClick={() => setPopupVisible(true)}>
                     <p className='text-[14px] flex items-center gap-2 bg-[#E4E6EA] hover-bg-gray-300 cursor-pointer rounded-sm mt-2 px-2 py-1'>
                         <BsCheckSquareFill size={16} />
                         Checklist
                     </p>
-                    {checkList && (
+                    {popupVisible && (
                         <div className='h-auto bg-white w-80 rounded-md absolute top-[35px] right-[-170px] z-10 p-5'>
-                            <div className='flex items-center justify-between'>
+                            <div className='flex items-center justify-between mb-3'>
                                 <p className='text-sm'>Add Checklist</p>
-                                <div onClick={toggleChecklist}>
+                                <div onClick={handlePopupClose}>
                                     <CgClose size={20} color='black' className='hover-bg-gray-200 hover-rounded cursor-pointer' />
                                 </div>
                             </div>
-                            <label htmlFor="">Title</label>
-                            <input type="text" className='w-full h-10 border-2 outline-none px-2 rounded-md' />
-                            <button className='w-fit py-1 px-4 rounded-sm text-white font-bold mt-3 bg-blue-500'>Add</button>
+                            <label htmlFor="title">Title</label>
+                            <input
+                                type="text"
+                                id="title"
+                                className='w-full h-10 border-2 outline-none px-2 mt-2 rounded-md'
+                                value={inputValue}
+                                onChange={handleInputChange}
+                            />
+                            <button
+                                className='w-fit py-1 px-4 rounded-sm text-white font-bold mt-3 bg-blue-500'
+                                onClick={handleAddClick}
+                            >
+                                Add
+                            </button>
                         </div>
                     )}
                 </div>
